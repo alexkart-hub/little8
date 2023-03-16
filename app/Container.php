@@ -5,19 +5,28 @@ namespace App;
 class Container
 {
     private $instances = [];
+    private static $instance = null;
 
     public function __construct()
     {
         $this->instances = Instances::get();
     }
 
-    public function get($class)
+    public static function getInstance()
     {
-        if ($this->has($class)) {
-            return $this->instances[$class];
+        if (!static::$instance) {
+            static::$instance = new self;
+        }
+        return static::$instance;
+    }
+
+    public function get($key)
+    {
+        if ($this->has($key)) {
+            return $this->instances[$key];
         }
 
-        $reflectionClass = new \ReflectionClass($class);
+        $reflectionClass = new \ReflectionClass($key);
         $constructor = $reflectionClass->getConstructor();
 
         if ($constructor === null) {
@@ -30,9 +39,9 @@ class Container
             $attrName = $attribute->getName();
             $paramType = $attribute->getType();
             if ($paramType === null) {
-                $constructorParams[] = $attrName;
+                $constructorParams[] = $this->get($attrName);
             } elseif($paramType == 'array') {
-                $constructorParams[] = (array)$attrName;
+                $constructorParams[] = $this->get($attrName);
             } else {
                 $paramClassName = $paramType->getName();
                 $constructorParams[] = $this->get($paramClassName);

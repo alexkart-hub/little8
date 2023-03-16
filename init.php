@@ -1,6 +1,10 @@
 <?php
 
 use App\Classes\Request;
+use App\Container;
+use App\Router;
 
-$request = new Request($_GET, $_POST, $_SERVER);
-(new \App\Router())->match($request->getServerParams()['REQUEST_URI']);
+$container = Container::getInstance();
+$router = $container->get(Router::class);
+$request = $container->get(Request::class);
+$router->match($request->getServerParams()['REQUEST_URI']);

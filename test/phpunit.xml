@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="bootstrap.php"
+         stopOnError="false"
+         stopOnFailure="false"
+         stopOnSkipped="false"
+         stopOnRisky="false"
+         failOnRisky="true"
+         failOnWarning="true"
+         colors="true">
+
+    <testsuites>
+        <testsuite name="test">
+            <directory>/test/tests/ExampleTest.php</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

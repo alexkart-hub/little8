@@ -8,22 +8,23 @@ use App\Controllers\HomeController;
 class Router
 {
     private $routes = [];
+    private Container $container;
 
-    public function __construct()
+    public function __construct(Container $container)
     {
         $this->setRoutes();
+        $this->container = $container;
     }
 
     public function match($url)
     {
         $urlPath = parse_url($url)['path'];
-        $container = new Container();
         if (!isset($this->routes[$urlPath])) {
             $this->set404();
             return;
         }
         $route = $this->routes[$urlPath];
-        $controller = $container->get($route->class);
+        $controller = $this->container->get($route->class);
         $action = $route->action;
         $controller->$action();
     }
